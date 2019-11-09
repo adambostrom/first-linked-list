@@ -15,6 +15,7 @@ void pushEnd(node_t * head, int val);
 void pushBeginning(node_t **head, int val);
 int pop(node_t ** head);
 int remove_last(node_t * head);
+int remove_by_index(node_t ** head, int n);
 
 void delay(int number_of_seconds);
 
@@ -26,26 +27,29 @@ int main() {
 		return 1;
 	}
 
-	head->val = 1;
+	head->val = 22;
 	head->next = (node_t*)malloc(sizeof(node_t));
 	
 
-	head->next->val = 2;
-	head->next->next = NULL;
+	head->next->val = 36;
+	head->next->next = (node_t*)malloc(sizeof(node_t));
+
+	head->next->next->val = 255;
+	head->next->next->next = NULL;
 
 	print_list(head); //<---------- print to see which value on every node
 
 
 	//Adding an item to the end of the list
 	int val = 0;
-	printf("Write a number to add to the end of the linked list: ");
+	printf("Write a number to end of the list: ");
 	scanf("%d", &val);
 	pushEnd(head, val);  //<--------- given number as second argument will be added as the new last node
 	print_list(head);
 
 
 	//Adding an item to the beginning of the list (pushing to the list)
-	printf("Write a number to add to the beginning of the linked list(pushing): ");
+	printf("Write number to beginning of list: ");
 	scanf("%d", &val);
 	pushBeginning(&head, val); //<-------------- given number will be added to the beginning of the list, not sure how i managed to actually do this
 	print_list(head);			//               , should really go back and look at double pointers alot more
@@ -53,23 +57,27 @@ int main() {
 
 	//Removing the first item (popping from the list)
 	int removeFirstItem;
-	printf("Removing the FIRST item in the linked list(popping)\nProcessing...\n");
+	printf("Removing FIRST item in list\tProcessing...\n");
 	delay(3);
 	removeFirstItem = pop(&head);
-	printf("Removed item: %d\nPrinting updated linked list.\nProcessing...\n", removeFirstItem);
-	delay(3);
+	printf("New linked list:\n");
 	print_list(head);
 
 	//Removing the last item
 	int removeLastItem;
-	printf("Removing the item at the END of the linked list(popping)\nProcessing...\n");
+	printf("Removing item at END of list\tProcessing...\n");
 	delay(3);
 	removeLastItem = remove_last(head);
-	printf("Removed item: %d\nPrinting updated list.\nProcessing...\n", removeLastItem);
-	delay(3);
+	printf("New linked list:\n");
 	print_list(head);
 
-
+	//Remove specific item
+	int removeSpecifItem,returValueFromFunc;
+	printf("Which item do you want to remove?");
+	scanf("%d", &removeSpecifItem);
+	returValueFromFunc = remove_by_index(&head, removeSpecifItem-1);
+	printf("New linked list:\n");
+	print_list(head);
 
 
 
@@ -79,11 +87,14 @@ int main() {
 
 void print_list(node_t * head) {
 	node_t * current = head;
+	int i = 1;
 
 	while (current != NULL) {
-		printf("%d\n", current->val);
+		printf("[%d]:%d\n", i, current->val);
 		current = current->next;
+		i++;
 	}
+	printf("\n");
 }
 
 void pushEnd(node_t *head, int val) {
@@ -142,6 +153,32 @@ int remove_last(node_t * head) {
 	retval = current->next->val;
 	free(current->next);
 	current->next = NULL;
+	return retval;
+
+}
+
+int remove_by_index(node_t ** head, int n) {
+	int i = 0;
+	int retval = -1;
+	node_t * current = *head;
+	node_t * temp_node = NULL;
+
+	if (n == 0) {
+		return pop(head);
+	}
+
+	for (i = 0; i < n - 1; i++) {
+		if (current->next == NULL) {
+			return -1;
+		}
+		current = current->next;
+	}
+
+	temp_node = current->next;
+	retval = temp_node->val;
+	current->next = temp_node->next;
+	free(temp_node);
+
 	return retval;
 
 }
