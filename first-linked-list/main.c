@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h> //<--- using just to make a delay to simulate a 1 second processing process.
 
 //don't forget to bring a towel
 
@@ -12,6 +13,9 @@ typedef struct node {
 void print_list(node_t *head);
 void pushEnd(node_t * head, int val);
 void pushBeginning(node_t **head, int val);
+int pop(node_t ** head);
+
+void delay(int number_of_seconds);
 
 int main() {
 	
@@ -38,10 +42,16 @@ int main() {
 	print_list(head);
 
 
-	printf("write down a number to add to the beginning of the list");
+	printf("write down a number to add to the beginning of the linked list(pushing)");
 	scanf("%d", &val);
 	pushBeginning(&head, val); //<-------------- given number will be added to the beginning of the list, not sure how i managed to actually do this
 	print_list(head);			//               , should really go back and look at double pointers alot more
+
+	int removedItem;
+	printf("remove the first item in the linked list(popping)\n processing...\n");
+	delay(3);
+	removedItem = pop(&head);
+	printf("the removed item had the value: %d\n", removedItem);
 
 	system("pause");
 	return 0;
@@ -75,4 +85,33 @@ void pushBeginning(node_t **head, int val) {
 	new_node->val = val;
 	new_node->next = *head;
 	*head = new_node;
+}
+
+int pop(node_t ** head) {
+	int retval = -1;
+	node_t * next_node = NULL;
+
+	if (*head == NULL) {
+		return -1;
+	}
+
+	next_node = (*head)->next;
+	retval = (*head)->val;
+	free(*head);
+	*head = next_node;
+
+	return retval;
+}
+
+void delay(int number_of_seconds)
+{
+	// Converting time into milli_seconds 
+	int milli_seconds = 1000 * number_of_seconds;
+
+	// Stroing start time 
+	clock_t start_time = clock();
+
+	// looping till required time is not acheived 
+	while (clock() < start_time + milli_seconds)
+		;
 }
