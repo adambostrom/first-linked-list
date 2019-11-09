@@ -48,10 +48,13 @@ int main() {
 	print_list(head);			//               , should really go back and look at double pointers alot more
 
 	int removedItem;
-	printf("remove the first item in the linked list(popping)\n processing...\n");
-	delay(3);
+	printf("remove the first item in the linked list(popping)\nProcessing...\n");
+	delay(2);
 	removedItem = pop(&head);
-	printf("the removed item had the value: %d\n", removedItem);
+	printf("the removed item had the value: %d\nprinting updated list.\nProcessing...\n", removedItem);
+
+	delay(2);
+	print_list(head);
 
 	system("pause");
 	return 0;
